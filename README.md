@@ -15,3 +15,8 @@ How to build?
 
 How to Use?
       refer to the test cases in Java code.
+      
+      
+Todo items:
+   - performance test;
+   - deploy package for linux;
