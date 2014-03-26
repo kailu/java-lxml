@@ -1,10 +1,11 @@
 #include "jnih.h"
+#include <cstring>
 
 
 JNIEXPORT jobjectArray JNICALL Java_com_ireeed_XPathApplier_htmlEvalXPath(JNIEnv *env, jobject jobj, jstring page,jstring xpath){
     jboolean isCopy;
-    const char *data = env->GetStringUTFChars(page,&isCopy);
-    const char *xpathdata = env->GetStringUTFChars(xpath,&isCopy);
+    const char * data = env->GetStringUTFChars(page,&isCopy);
+    const char * xpathdata = env->GetStringUTFChars(xpath,&isCopy);
     if(data != NULL){
 	std::string htmldata(data);
 
@@ -30,8 +31,11 @@ JNIEXPORT jobjectArray JNICALL Java_com_ireeed_XPathApplier_htmlEvalXPath(JNIEnv
 JNIEXPORT jobjectArray JNICALL Java_com_ireeed_XPathApplier_htmlEvalXPaths(JNIEnv *env, jobject jobj, jstring page, jobjectArray xpaths){
     jboolean isCopy;
     const char *data = env->GetStringUTFChars(page,&isCopy);
-    std::string datastr = std::string(data);
-    xmlDocPtr doc = parseHTML(datastr.c_str(),datastr.length());
+
+    xmlDocPtr doc = parseHTML(data,strlen(data));
+    //inform jvm to release the allocated data, no matter copied is true or false
+    env->ReleaseStringUTFChars(page,data);
+
     xmlXPathObjectPtr result;
     xmlNodeSetPtr nodeset;
     std::vector<std::vector<std::string> > ret;
@@ -60,6 +64,8 @@ JNIEXPORT jobjectArray JNICALL Java_com_ireeed_XPathApplier_htmlEvalXPaths(JNIEn
 		    }
 		    xmlXPathFreeObject(result);
 		}
+		//inform jvm to release the allocated data, no matter copied is true or false
+		env->ReleaseStringUTFChars(string,xpath);
 	    }
 	    ret.push_back(output);
 
@@ -95,8 +101,11 @@ JNIEXPORT jobjectArray JNICALL Java_com_ireeed_XPathApplier_htmlEvalXPaths(JNIEn
 JNIEXPORT jobjectArray JNICALL Java_com_ireeed_XPathApplier_xmlEvalXPaths(JNIEnv *env, jobject jobj, jstring page, jobjectArray xpaths){
     jboolean isCopy;
     const char *data = env->GetStringUTFChars(page,&isCopy);
-    std::string datastr = std::string(data);
-    xmlDocPtr doc = parseXML(datastr.c_str(),datastr.length());
+
+    xmlDocPtr doc = parseXML(data,strlen(data));
+    //inform jvm to release the allocated data, no matter copied is true or false
+    env->ReleaseStringUTFChars(page,data);
+
     xmlXPathObjectPtr result;
     xmlNodeSetPtr nodeset;
     std::vector<std::vector<std::string> > ret;
@@ -125,6 +134,8 @@ JNIEXPORT jobjectArray JNICALL Java_com_ireeed_XPathApplier_xmlEvalXPaths(JNIEnv
 		    }
 		    xmlXPathFreeObject(result);
 		}
+		//inform jvm to release the allocated data, no matter copied is true or false
+		env->ReleaseStringUTFChars(string,xpath);
 	    }
 	    ret.push_back(output);
 
