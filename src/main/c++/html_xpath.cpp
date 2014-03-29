@@ -25,8 +25,8 @@ void downloadPage(const char* url, std::string& output){
 
 
 xmlDocPtr parseHTML(const char* data, const int length){
-    htmlParserCtxtPtr parser = htmlCreatePushParserCtxt(NULL,NULL,NULL,0,NULL,XML_CHAR_ENCODING_NONE);
-    htmlCtxtUseOptions(parser, HTML_PARSE_NOBLANKS | HTML_PARSE_NOERROR | HTML_PARSE_NOWARNING | HTML_PARSE_NONET);
+    htmlParserCtxtPtr parser = htmlCreatePushParserCtxt(NULL,NULL,NULL,0,NULL,XML_CHAR_ENCODING_UTF8);
+    htmlCtxtUseOptions(parser, HTML_PARSE_NOBLANKS | HTML_PARSE_NOERROR | HTML_PARSE_NOWARNING | HTML_PARSE_NONET|HTML_PARSE_IGNORE_ENC);
     htmlParseChunk(parser, data, length, 0);
     xmlDocPtr ret = parser->myDoc;
     htmlFreeParserCtxt(parser);
