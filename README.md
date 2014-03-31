@@ -12,6 +12,9 @@ How to build?
       - make all
 
       You will find the library under: src/main/c++/.libs/libhtmlxpath.dylib[so]. [ For mac/linux accordingly]
+   - Another way to build c++ library with simple command line:
+      - On mac: 
+         g++ -I. -I/opt/local/include/libxml2/ -dynamiclib -o libhtmlxpath.dylib ./html_xpath.cpp -lxml2 -lcurl -v
 
 How to Use?
       refer to the test cases in Java code.
